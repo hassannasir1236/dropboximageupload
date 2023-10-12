@@ -5,66 +5,67 @@ use Dropbox\Client;
 use \Dropbox as dbx;
 class Home extends BaseController
 {
-    public function index(): string
-    {
-        return view('welcome_message');
+    public function index()
+    { $accessToken = 'sl.BnyX8tZ4MoG6srhy06tZqpZrQA7IGI9N4C6zatJwbMDdswx2aSOFipPYQ4onYQKAQudAAb4SMkvRDG75JPTMgokhiK0seJWm3gl99dTa4PAmBf06qLra2DT5x1E01rqj_2QpOuH1xX5EKHSqcrRM';
+        
+        // Dropbox folder path
+        $dropboxFolderPath = '/path/to/dropbox/folder/';
+
+        $ch = curl_init("https://api.dropboxapi.com/2/files/list_folder");
+        // 'https://content.dropboxapi.com/2/files/download';
+
+        $requestData = json_encode([
+            'path' => $dropboxFolderPath,
+        ]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json',
+        ]);
+
+        $response = json_decode(curl_exec($ch), true);
+        // curl_close($ch);
+
+        $images = [];
+        print_r($response);
+        foreach ($response['entries'] as $entry) {
+            if (isset($entry['name']) && is_string($entry['name']) && $entry['.tag'] === 'file') {
+                $images[] = 'https://www.dropbox.com/home/Apps/uploadmultipleimages/path/to/dropbox/folder?is_backup=False&preview='.$entry['name'];
+            }
+        }      // Initialize cURL
+        //  $ch = curl_init("https://api.dropboxapi.com/2/files/list_folder");
+
+        //  // Define the request data
+        //  $requestData = json_encode([
+        //      'path' => $dropboxFolderPath,
+        //  ]);
+ 
+        //  // Set cURL options
+        //  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        //  curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
+        //  curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        //      'Authorization: Bearer ' . $accessToken,
+        //      'Content-Type: application/json',
+        //  ]);
+ 
+        //  // Execute cURL request
+        //  $response = curl_exec($ch);
+ 
+        //  // Close cURL session
+        //  curl_close($ch);
+ 
+        //  // Parse the JSON response
+        //  $files = json_decode($response, true);
+ 
+         return view('welcome_message',  ['images' => $images]);
     }
     public function store(){ 
-        $accessToken = 'sl.BntOlx9qWjjh-kFN9VtSWDDTa1jfjfR-zZyPrfS2tGHRTu4YEzw6i63fG2H-d6NH6Yy0EgTBDz0m3xd3byJ0KIb0_vIfLG2pOigtTcJGExFkPNhoeYwNPiYgk64tohRzaRxMZxDigmhPBok7kiD0';
-        // Replace 'your-access-token' with your Dropbox access token
-        // $file = $this->request->getFile('image'); // Assuming your input field name is 'image'
-
-        // if ($file->isValid() && !$file->hasMoved()) {
-        //     $path = '/images/' . $file->getName(); // Set the path in Dropbox
-        //     print($path);
-        //    // Dropbox API endpoint
-        //    $url = 'https://www.dropbox.com/scl/fo/erznl15i1zsts09tzro57/h?rlkey=3dac732h7f6jr3411lxpwyk6m&dl=0';
-
-        //     $headers = [
-        //         'Authorization: Bearer ' . $accessToken,
-        //         'Content-Type: application/octet-stream',
-        //         'Dropbox-API-Arg: {"path":"' . $path . '","mode":"add"}',
-        //     ];
-        //     print_r($headers);
-        //     // Read the file contents
-        //     $fileContent = file_get_contents($file->getTempName());
-
-        //     // Make an HTTP POST request to upload the file to Dropbox
-        //     $ch = curl_init($url);
-        //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        //     curl_setopt($ch, CURLOPT_POST, true);
-        //     curl_setopt($ch, CURLOPT_POSTFIELDS, $fileContent);
-        //     curl_exec($ch);
-        //     if($ch){
-        //         echo 'Image uploaded to Dropbox!';
-        //     }
-           
-        // } else {
-        //     echo 'Image upload failed.';
-        // }
-        // $filePath = $_FILES['image']['tmp_name']; // Path to the uploaded image https://content.dropboxapi.com/2/files/upload
-
-
-
-
-
-
-
-                //         $filePath = $this->request->getFile('image');
-
-        //     $uploadPath = 'https://www.dropboxapi.com/home/Apps/uploadmultipleimages'; // Destination path in Dropbox
-
-        //     $ch = curl_init('https://content.dropboxapi.com/2/files/upload');
-            
-        //     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        //         'Authorization: Bearer ' . $accessToken,
-        //         'Content-Type: application/octet-stream',
-        //         'Dropbox-API-Arg: {"path":"' . $uploadPath . '","mode":"add"}',
-        //     ]);
-        //     curl_setopt($ch, CURLOPT_POST, true);
-        //    curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents($filePath));
+        $accessToken = 'sl.BnyX8tZ4MoG6srhy06tZqpZrQA7IGI9N4C6zatJwbMDdswx2aSOFipPYQ4onYQKAQudAAb4SMkvRDG75JPTMgokhiK0seJWm3gl99dTa4PAmBf06qLra2DT5x1E01rqj_2QpOuH1xX5EKHSqcrRM';
         
-        //     $response = curl_exec($ch);
         $file = $this->request->getFile('image');
 
         if ($file->isValid() && $file->getSize() > 0) {
@@ -90,11 +91,81 @@ class Home extends BaseController
             }
 
             curl_close($ch);
-            // if($response){
-            //     echo "image save";
-            //         }
-            // // curl_close($ch);
-            // }
+          
         }
     }
+    public function fetchImage()
+    {
+        // Dropbox access token
+        $accessToken = 'sl.BnyX8tZ4MoG6srhy06tZqpZrQA7IGI9N4C6zatJwbMDdswx2aSOFipPYQ4onYQKAQudAAb4SMkvRDG75JPTMgokhiK0seJWm3gl99dTa4PAmBf06qLra2DT5x1E01rqj_2QpOuH1xX5EKHSqcrRM';
+       
+        // Dropbox file path
+        $dropboxFilePath = '/path/to/dropbox/folder/download.jpg';
+
+        // Dropbox API URL
+        $apiUrl = 'https://content.dropboxapi.com/2/files/download';
+
+        // Initialize cURL
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $accessToken,
+            'Dropbox-API-Arg: {"path":"' . $dropboxFilePath . '"}',
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute the cURL request
+        $imageContent = curl_exec($ch);
+
+        // Close the cURL session
+        curl_close($ch);
+
+        // Display the image
+        header('Content-Type: image/jpeg');
+        echo $imageContent;
+    }
+    // public function listImages()
+    // {
+    //     // Dropbox access token
+    //     $accessToken = 'sl.BnyrXX1sdR2WFbotrxjs5P3SCLGIrddovNyxaaYbYiG23XFHm-jB3es0gs08wEtSHX3AFqNpkqXIkN2VVHiISyznqYM7u_Xr_tnEFFe_EbqTPLLhK0AHJeGFqDijm5G3lJF2lgohJc7-KCXmYYIu';
+        
+    //     // Dropbox folder path
+    //     $dropboxFolderPath = '/path/to/dropbox/folder/';
+
+    //     // Dropbox API endpoint
+    //     $apiUrl = 'https://api.dropboxapi.com/2/files/list_folder';
+
+    //     // Define the request parameters
+    //     $requestBody = json_encode([
+    //         'path' => $dropboxFolderPath,
+    //         'recursive' => false,
+    //     ]);
+
+    //     // Initialize cURL
+    //     $ch = curl_init();
+
+    //     // Set cURL options
+    //     curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    //         'Authorization: Bearer ' . $accessToken,
+    //         'Content-Type: application/json',
+    //     ]);
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $requestBody);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    //     // Execute the cURL request
+    //     $response = curl_exec($ch);
+
+    //     // Close the cURL session
+    //     curl_close($ch);
+
+    //     // Decode the JSON response
+    //     $data = json_decode($response, true);
+    //     print_r($data);
+    //     // Pass the data to the view
+    //     return view('welcome_message', ['data' => $data]);
+    // }
 }
