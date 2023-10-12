@@ -12,9 +12,9 @@
 <img src="<?= site_url('fetch-image') ?>" alt="Fetched Image">
 <img src="https://www.dropbox.com/scl/fi/ep9qvszqvijghpbdib7sw/359787138_3592562827641778_1454368951635431297_n.jpg?rlkey=b15z26zjjzpokk8bd3tah64gx&dl=0" alt="Image" />
 <h1>Multiple Image Gallery</h1>
-<?= print_r($images);?>
+
 <?php foreach ($images as $image): ?>
-            <img src="<?= $image ?>" alt="Image" />
+            <img width="100" height="100" src="<?= $image ?>" alt="Image" />
         <?php  endforeach; ?>
 </body>
 </html>
