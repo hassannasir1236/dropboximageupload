@@ -40,6 +40,10 @@
                 success: function (response) {
                     if (response.success) {
                         // Handle success, e.g., remove the deleted image from the gallery
+                        $('.delete-button').click(function() {
+        // Find the closest parent <div> with the class "item" and hide it
+                            $(this).closest('.image-item').fadeOut();
+                        });
                         console.log(response);
                     } else {
                         // Handle error, e.g., display an error message
