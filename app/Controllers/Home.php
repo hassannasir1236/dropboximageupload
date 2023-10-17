@@ -6,7 +6,11 @@ use \Dropbox as dbx;
 class Home extends BaseController
 {
     public function index()
+<<<<<<< HEAD
     { $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
+    { $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
         
         // Dropbox folder path
         $dropboxFolderPath = '/path/to/dropbox/folder/';
@@ -36,6 +40,7 @@ class Home extends BaseController
             foreach ($response['entries'] as $entry) {
             if (isset($entry['name']) && is_string($entry['name']) && $entry['.tag'] === 'file') {
                 // Fetch image content for each file
+                $path[]=$entry['path_display'];
                 $imageContent = $this->fetchImageContent($accessToken, $entry['path_display']);
                 $images[] = 'data:image/jpeg;base64,' . base64_encode($imageContent);
             }
@@ -43,7 +48,7 @@ class Home extends BaseController
         }
         
      
-         return view('welcome_message',  ['images' => $images]);
+         return view('welcome_message',  ['images' => $images,'path' => $path]);
     }
     private function fetchImageContent($accessToken, $path)
     {
@@ -62,7 +67,11 @@ class Home extends BaseController
         return $imageContent;
     }
     public function store(){ 
+<<<<<<< HEAD
         $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
+        $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
         
         $file = $this->request->getFile('image');
 
@@ -89,13 +98,18 @@ class Home extends BaseController
             }
 
             curl_close($ch);
+            return redirect('/');
           
         }
     }
     public function fetchImage()
     {
         // Dropbox access token
+<<<<<<< HEAD
         $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
+        $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
        
         // Dropbox file path
         $dropboxFilePath = '/path/to/dropbox/folder/download.jpg';
@@ -123,6 +137,44 @@ class Home extends BaseController
         // Display the image
         header('Content-Type: image/jpeg');
         echo $imageContent;
+    }
+    public function deleteImage()
+    {
+        // Check if it's an AJAX request
+        if ($this->request->isAJAX()) {
+            $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+            $dropboxImagePath = $this->request->getPost('imagePath'); // Get the image path from the POST data
+            // Delete the image from Dropbox
+            $result = $this->deleteImageFromDropbox($accessToken, $dropboxImagePath);
+
+            // Return a response to the client
+            if ($result === true) {
+                return $this->response->setJSON(['success' => true,'dropimage'=> $dropboxImagePath ]);
+            } else {
+                return $this->response->setJSON(['error' => 'Failed to delete image','dropimage'=>$dropboxImagePath ]);
+            }
+        }
+    }
+    private function deleteImageFromDropbox($accessToken, $path)
+    {
+        $ch = curl_init("https://api.dropboxapi.com/2/files/delete_v2");
+
+        $requestData = json_encode([
+            'path' => $path,
+        ]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $requestData);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json',
+        ]);
+
+        $response = json_decode(curl_exec($ch), true);
+        curl_close($ch);
+
+        return isset($response['metadata']);
     }
     
 }
