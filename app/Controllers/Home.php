@@ -6,7 +6,7 @@ use \Dropbox as dbx;
 class Home extends BaseController
 {
     public function index()
-    { $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+    { $accessToken = 'sl.BoDhqumALgA8gIp631Z6L68_xamh1tkUVXqfRjLNwCnDSwAMvKVpZdsqMLclm-scXXb-1YY7O3hZ7f-acIf2PH93iswpf90zXD3WJCc7NLiozmGh_gFCG4Bjt418DKdsPB8EUg0_Sz-LBwILevEK';
         
         // Dropbox folder path
         $dropboxFolderPath = '/path/to/dropbox/folder/';
@@ -40,8 +40,13 @@ class Home extends BaseController
                 $images[] = 'data:image/jpeg;base64,' . base64_encode($imageContent);
             }
         }
+        if(!empty($path)){
+            return view('welcome_message',  ['images' => $images,'path' => $path]);
+        }else{
+            return view('welcome_message');
+        }
      
-         return view('welcome_message',  ['images' => $images,'path' => $path]);
+        
     }
     private function fetchImageContent($accessToken, $path)
     {
@@ -60,7 +65,7 @@ class Home extends BaseController
         return $imageContent;
     }
     public function store(){ 
-        $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+        $accessToken = 'sl.BoBS0fouBp3ZeJdLH4lFZm4-gLejbJyC6Zc_HLkSysoLa6Vmw0rfUdbfNFVmtwwhNeWCG0goy4E1p6WdvrF4ZHUO_hL5MVcxT8Fi5I1XEqW9bmYlyTRvgmBO6wxZ0xylnDTzD_iZno1rIHSUJlGu';
         
         $file = $this->request->getFile('image');
 
@@ -94,7 +99,7 @@ class Home extends BaseController
     public function fetchImage()
     {
         // Dropbox access token
-        $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+        $accessToken = 'sl.BoDhqumALgA8gIp631Z6L68_xamh1tkUVXqfRjLNwCnDSwAMvKVpZdsqMLclm-scXXb-1YY7O3hZ7f-acIf2PH93iswpf90zXD3WJCc7NLiozmGh_gFCG4Bjt418DKdsPB8EUg0_Sz-LBwILevEK';
        
         // Dropbox file path
         $dropboxFilePath = '/path/to/dropbox/folder/download.jpg';
@@ -127,7 +132,7 @@ class Home extends BaseController
     {
         // Check if it's an AJAX request
         if ($this->request->isAJAX()) {
-            $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+            $accessToken = 'sl.BoDhqumALgA8gIp631Z6L68_xamh1tkUVXqfRjLNwCnDSwAMvKVpZdsqMLclm-scXXb-1YY7O3hZ7f-acIf2PH93iswpf90zXD3WJCc7NLiozmGh_gFCG4Bjt418DKdsPB8EUg0_Sz-LBwILevEK';
             $dropboxImagePath = $this->request->getPost('imagePath'); // Get the image path from the POST data
             // Delete the image from Dropbox
             $result = $this->deleteImageFromDropbox($accessToken, $dropboxImagePath);
