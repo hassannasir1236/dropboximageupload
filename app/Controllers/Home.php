@@ -6,7 +6,11 @@ use \Dropbox as dbx;
 class Home extends BaseController
 {
     public function index()
+<<<<<<< HEAD
+    { $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
     { $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
         
         // Dropbox folder path
         $dropboxFolderPath = '/path/to/dropbox/folder/';
@@ -32,7 +36,8 @@ class Home extends BaseController
         curl_close($ch);
 
         $images = [];
-        foreach ($response['entries'] as $entry) {
+        if ($response) {
+            foreach ($response['entries'] as $entry) {
             if (isset($entry['name']) && is_string($entry['name']) && $entry['.tag'] === 'file') {
                 // Fetch image content for each file
                 $path[]=$entry['path_display'];
@@ -40,6 +45,8 @@ class Home extends BaseController
                 $images[] = 'data:image/jpeg;base64,' . base64_encode($imageContent);
             }
         }
+        }
+        
      
          return view('welcome_message',  ['images' => $images,'path' => $path]);
     }
@@ -60,7 +67,11 @@ class Home extends BaseController
         return $imageContent;
     }
     public function store(){ 
+<<<<<<< HEAD
+        $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
         $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
         
         $file = $this->request->getFile('image');
 
@@ -94,7 +105,11 @@ class Home extends BaseController
     public function fetchImage()
     {
         // Dropbox access token
+<<<<<<< HEAD
+        $accessToken = 'sl.BoEOcNTCWPJZx0zIQTLTF94hQ6Xyin7xrAT2z8B8gbB-7zI3zySVAzri8OczdA6ZKTJLVIIKrKssY-Ag28Ugy2RKZ4dKoFJpNQMDpw4LVORxrmCfk-TeF_5UOCclxCAWceST_sY4RnhD';
+=======
         $accessToken = 'sl.Bn26kNJ3KbZC4igCTYNpOSlXFY3ZngIrsLsGWB9qI1qRNMXGg2itN2FSL279NeW-KJole3SvsolMgkMj67kkNmISeaKFdTw7Hq-Pyj9m-U2hJboTByiJZkLY1pOx5iV-w4dGr1xsag3ki0dgw9Cv';
+>>>>>>> ac87d04669c78c1804a7fb6775b6057b57725c45
        
         // Dropbox file path
         $dropboxFilePath = '/path/to/dropbox/folder/download.jpg';
